@@ -20,11 +20,11 @@
 <body>
 
 <%
-    String agape-schedulerName = request.getParameter("agape-schedulerName");
-    if (agape-schedulerName == null) {
-        agape-schedulerName = "default";
+    String agapeschedulerName = request.getParameter("agape-schedulerName");
+    if (agapeschedulerName == null) {
+        agapeschedulerName = "default";
     }
-    pageContext.setAttribute("agape-schedulerName", agape-schedulerName);
+    pageContext.setAttribute("agape-schedulerName", agapeschedulerName);
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user != null) {
@@ -44,10 +44,10 @@
 
 <%
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key agape-schedulerKey = KeyFactory.createKey("Guestbook", agape-schedulerName);
+    Key agapeschedulerKey = KeyFactory.createKey("Guestbook", agapeschedulerName);
     // Run an ancestor query to ensure we see the most up-to-date
     // view of the Greetings belonging to the selected Guestbook.
-    Query query = new Query("Greeting", agape-schedulerKey).addSort("date", Query.SortDirection.DESCENDING);
+    Query query = new Query("Greeting", agapeschedulerKey).addSort("date", Query.SortDirection.DESCENDING);
     List<Entity> greetings = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
     if (greetings.isEmpty()) {
 %>
