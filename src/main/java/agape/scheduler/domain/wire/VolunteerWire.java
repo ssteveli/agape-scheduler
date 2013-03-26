@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.appengine.api.datastore.Entity;
+
 @XmlRootElement(name = "volunteer")
 @XmlAccessorType(XmlAccessType.NONE)
 public class VolunteerWire implements Serializable {
@@ -24,7 +26,7 @@ public class VolunteerWire implements Serializable {
 	private String lastName;
 
 	@XmlElement
-	private String[] emailAddresses;
+	private String emailAddress;
 
 	@XmlElement
 	private String mobilePhone;
@@ -73,12 +75,12 @@ public class VolunteerWire implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String[] getEmailAddresses() {
-		return emailAddresses;
+	public String getEmailAddress() {
+		return emailAddress;
 	}
 
-	public void setEmailAddresses(String[] emailAddresses) {
-		this.emailAddresses = emailAddresses;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public String getMobilePhone() {
@@ -121,4 +123,13 @@ public class VolunteerWire implements Serializable {
 		this.lastUpdatedTs = lastUpdatedTs;
 	}
 
+	public static VolunteerWire fromEntity(Entity e) {
+		VolunteerWire v = new VolunteerWire();
+		v.setUsername((String)e.getProperty("userName"));
+		v.setCreatedTs((Date)e.getProperty("createdTs"));
+		v.setEmailAddress((String)e.getProperty("email"));
+		v.setMobilePhone((String)e.getProperty("mobilePhone"));
+		
+		return v;
+	}
 }
