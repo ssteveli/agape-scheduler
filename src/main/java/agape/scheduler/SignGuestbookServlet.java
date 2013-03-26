@@ -39,11 +39,11 @@ public class SignGuestbookServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 
-    String agape-schedulerName = req.getParameter("agape-schedulerName");
-    Key agape-schedulerKey = KeyFactory.createKey("Guestbook", agape-schedulerName);
+    String agapeschedulerName = req.getParameter("agape-schedulerName");
+    Key agapeschedulerKey = KeyFactory.createKey("Guestbook", agapeschedulerName);
     String content = req.getParameter("content");
     Date date = new Date();
-    Entity greeting = new Entity("Greeting", agape-schedulerKey);
+    Entity greeting = new Entity("Greeting", agapeschedulerKey);
     greeting.setProperty("user", user);
     greeting.setProperty("date", date);
     greeting.setProperty("content", content);
@@ -51,6 +51,6 @@ public class SignGuestbookServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(greeting);
 
-    resp.sendRedirect("/agape-scheduler.jsp?agape-schedulerName=" + agape-schedulerName);
+    resp.sendRedirect("/agape-scheduler.jsp?agape-schedulerName=" + agapeschedulerName);
   }
 }

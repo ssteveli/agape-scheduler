@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class GuestbookServletTest {
 
-  private GuestbookServlet agape-schedulerServlet;
+  private GuestbookServlet agapeschedulerServlet;
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalUserServiceTestConfig())
@@ -49,7 +49,7 @@ public class GuestbookServletTest {
   @Before
   public void setupGuestBookServlet() {
     helper.setUp();
-    agape-schedulerServlet = new GuestbookServlet();
+    agapeschedulerServlet = new GuestbookServlet();
   }
 
   @After
@@ -66,7 +66,7 @@ public class GuestbookServletTest {
 
     when(response.getWriter()).thenReturn(new PrintWriter(stringWriter));
 
-    agape-schedulerServlet.doGet(request, response);
+    agapeschedulerServlet.doGet(request, response);
 
     User currentUser = UserServiceFactory.getUserService().getCurrentUser();
 

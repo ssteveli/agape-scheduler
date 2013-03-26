@@ -67,10 +67,10 @@ public class SignGuestbookServletTest {
     HttpServletRequest request = mock(HttpServletRequest.class);
     HttpServletResponse response = mock(HttpServletResponse.class);
 
-    String agape-schedulerName = "TestGuestbook";
+    String agapeschedulerName = "TestGuestbook";
     String testContent = "Test Content";
 
-    when(request.getParameter("agape-schedulerName")).thenReturn(agape-schedulerName);
+    when(request.getParameter("agape-schedulerName")).thenReturn(agapeschedulerName);
     when(request.getParameter("content")).thenReturn(testContent);
 
     Date priorToRequest = new Date();
@@ -85,7 +85,7 @@ public class SignGuestbookServletTest {
 
     Entity greeting = DatastoreServiceFactory.getDatastoreService().prepare(new Query()).asSingleEntity();
 
-    assertEquals(agape-schedulerName, greeting.getKey().getParent().getName());
+    assertEquals(agapeschedulerName, greeting.getKey().getParent().getName());
     assertEquals(testContent, greeting.getProperty("content"));
     assertEquals(currentUser, greeting.getProperty("user"));
 
