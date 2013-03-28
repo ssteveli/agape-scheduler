@@ -1,18 +1,13 @@
 package agape.scheduler.domain.wire;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.appengine.api.datastore.Entity;
-
 @XmlRootElement(name = "volunteer")
 @XmlAccessorType(XmlAccessType.NONE)
-public class VolunteerWire implements Serializable {
+public class VolunteerWire extends AbstractWire<VolunteerWire> {
 	private static final long serialVersionUID = 194286639770572153L;
 
 	@XmlElement
@@ -36,12 +31,6 @@ public class VolunteerWire implements Serializable {
 
 	@XmlElement
 	private String workPhone;
-
-	@XmlElement
-	private Date createdTs;
-
-	@XmlElement
-	private Date lastUpdatedTs;
 	
 	public String getUsername() {
 		return username;
@@ -107,29 +96,4 @@ public class VolunteerWire implements Serializable {
 		this.workPhone = workPhone;
 	}
 
-	public Date getCreatedTs() {
-		return createdTs;
-	}
-
-	public void setCreatedTs(Date createdTs) {
-		this.createdTs = createdTs;
-	}
-
-	public Date getLastUpdatedTs() {
-		return lastUpdatedTs;
-	}
-
-	public void setLastUpdatedTs(Date lastUpdatedTs) {
-		this.lastUpdatedTs = lastUpdatedTs;
-	}
-
-	public static VolunteerWire fromEntity(Entity e) {
-		VolunteerWire v = new VolunteerWire();
-		v.setUsername((String)e.getProperty("userName"));
-		v.setCreatedTs((Date)e.getProperty("createdTs"));
-		v.setEmailAddress((String)e.getProperty("email"));
-		v.setMobilePhone((String)e.getProperty("mobilePhone"));
-		
-		return v;
-	}
 }
