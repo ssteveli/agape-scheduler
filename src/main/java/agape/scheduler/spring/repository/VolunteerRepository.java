@@ -1,113 +1,20 @@
 package agape.scheduler.spring.repository;
 
-import java.util.ArrayList;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 
 import agape.scheduler.domain.wire.VolunteerWire;
 
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
 @Repository
-public class VolunteerRepository implements CrudRepository<VolunteerWire, String> {
-
-	@Autowired
-	private DatastoreService ds;
-	
-	@Override
-	public <S extends VolunteerWire> S save(S entity) {
-		ds.put(toEntity(entity));
-		return entity;
-	}
+public class VolunteerRepository extends AbstractEntityRepository<VolunteerWire, String> {
 
 	@Override
-	public <S extends VolunteerWire> Iterable<S> save(Iterable<S> entities) {
-		ArrayList<S> l = new ArrayList<S>();
-		for (S entity : entities) {
-			save(entity);
-			l.add(entity);
-		}
-		
-		return l;
-	}
-
-	@Override
-	public VolunteerWire findOne(String id) {
-		try {
-			Entity db = ds.get(KeyFactory.createKey("Volunteer", id));
-			return fromEntity(db);
-		} catch (EntityNotFoundException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public boolean exists(String id) {
-		return findOne(id) != null;
-	}
-
-	@Override
-	public Iterable<VolunteerWire> findAll() {
-		Query q = new Query("Volunteer");
-		PreparedQuery pq = ds.prepare(q);
-		
-		ArrayList<VolunteerWire> results = new ArrayList<VolunteerWire>();
-		for (Entity e : pq.asIterable()) {
-			results.add(fromEntity(e));
-		}
-		
-		return results;
-	}
-
-	@Override
-	public Iterable<VolunteerWire> findAll(Iterable<String> ids) {
-		ArrayList<VolunteerWire> results = new ArrayList<VolunteerWire>();
-		for (String id : ids) {
-			results.add(findOne(id));
-		}
-		
-		return results;
-	}
-
-	@Override
-	public long count() {
-		Query q = new Query("Volunteer");
-		PreparedQuery pq = ds.prepare(q);
-		return pq.countEntities(FetchOptions.Builder.withDefaults());
-	}
-
-	@Override
-	public void delete(String id) {
-		ds.delete(KeyFactory.createKey("Volunteer", id));
-	}
-
-	@Override
-	public void delete(VolunteerWire entity) {
-		delete(entity.getUsername());
-	}
-
-	@Override
-	public void delete(Iterable<? extends VolunteerWire> entities) {
-		for (VolunteerWire v : entities) {
-			delete(v);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		throw new UnsupportedOperationException("not implemented yet");
-	}
-
-	private VolunteerWire fromEntity(Entity e) {
+	protected VolunteerWire fromEntity(Entity e) {
 		VolunteerWire v = new VolunteerWire();
 		v.setCreatedTs((Date)e.getProperty("createdTs"));
 		v.setEmailAddress((String)e.getProperty("email"));
@@ -122,7 +29,8 @@ public class VolunteerRepository implements CrudRepository<VolunteerWire, String
 		return v;
 	}
 
-	private Entity toEntity(VolunteerWire v) {
+	@Override
+	protected Entity toEntity(VolunteerWire v) {
 		Entity e = new Entity("Volunteer", v.getUsername());
 		e.setProperty("firstName", v.getFirstName());
 		e.setProperty("lastName", v.getLastName());
@@ -137,4 +45,18 @@ public class VolunteerRepository implements CrudRepository<VolunteerWire, String
 		return e;
 	}
 
+	@Override
+	protected String getType() {
+		return "Volunteer";
+	}
+
+	@Override
+	protected Key getKey(String id) {
+		return KeyFactory.createKey(getType(), id);
+	}
+
+	@Override
+	protected Key getKey(VolunteerWire e) {
+		return KeyFactory.createKey(getType(), e.getUsername());
+	}
 }
